@@ -1,0 +1,239 @@
+{
+    "patterns": [
+        {
+            "class": "TextBoxPattern",
+            "page": 0,
+            "position": [150,100,420,140],
+            "action": "check_format",
+            "name": "title",
+            "expected_text": "2020年基準 消費者物価指数",
+            "score_weight": 1
+        },
+        {
+            "class": "TextBoxPattern",
+            "page": 0,
+            "position": [70,155,140,180],
+            "action": "check_format",
+            "name": "subtitle",
+            "expected_text": "概況",
+            "score_weight": 1
+        },
+        {
+            "class": "TextBoxPattern",
+            "page": 0,
+            "position": [75,183,429,225],
+            "action": "extract_text",
+            "name": "overview1"
+        },
+        {
+            "class": "TextBoxPattern",
+            "page": 0,
+            "position": [69,220,430,258],
+            "action": "extract_text",
+            "name": "overview2"
+        },
+        {
+            "class": "TextBoxPattern",
+            "page": 0,
+            "position": [70,254,470,294],
+            "action": "extract_text",
+            "name": "overview3"
+        },
+        {
+            "class": "ListTablePattern",
+            "page": 0,
+            "position": [434,3577,3766,4641],
+            "shape": [7,"*"],
+            "grouping": "col",
+            "resolution_rate": 7,
+            "score_weight": 5,
+            "landmarks": [
+                {
+                    "loc": [0,0],
+                    "name": "raw_data",
+                    "expected_text": "原数値"
+                }
+            ],
+            "table_headers": [
+                {
+                    "loc": [0,0],
+                    "name": "month",
+                    "scope-range": [[0,2],[0,-1]],
+                    "expected_text": "原数値"
+                },
+                {
+                    "loc": [1,0],
+                    "name": "total",
+                    "scope-range": [[1,2],[2,-1]],
+                    "expected_text": "総合"
+                },
+                {
+                    "loc": [1,1],
+                    "name": "index",
+                    "scope-range": [[1,2],[1,-1]],
+                    "expected_text": "指数"
+                },
+                {
+                    "loc": [2,1],
+                    "name": "ratio_to_last_year",
+                    "scope-range": [[2,2],[2,-1]],
+                    "expected_text": "前年同月比(％)"
+                },
+                {
+                    "loc": [3,0],
+                    "name": "total_without_fresh_foods",
+                    "scope-range": [[3,2],[4,-1]],
+                    "expected_text": "生鮮食品を除く総合"
+                },
+                {
+                    "loc": [3,1],
+                    "name": "index",
+                    "scope-range": [[3,2],[3,-1]],
+                    "expected_text": "指数"
+                },
+                {
+                    "loc": [4,1],
+                    "name": "ratio_to_last_year",
+                    "scope-range": [[4,2],[4,-1]],
+                    "expected_text": "前年同月比(％)"
+                },
+                {
+                    "loc": [5,0],
+                    "name": "total_without_fresh_foods_and_energy",
+                    "scope-range": [[5,2],[6,-1]],
+                    "expected_text": "生鮮食品及びエネルギーを除く総合"
+                },
+                {
+                    "loc": [5,1],
+                    "name": "index",
+                    "scope-range": [[5,2],[5,-1]],
+                    "expected_text": "指数"
+                },
+                {
+                    "loc": [6,1],
+                    "name": "ratio_to_last_year",
+                    "scope-range": [[6,2],[6,-1]],
+                    "expected_text": "前年同月比(％)"
+                }
+            ],
+            "additional_info_cells": []
+        },
+        {
+            "class": "MatrixTablePattern",
+            "page": 2,
+            "position": [357,1428,4032,2478],
+            "shape": [8,9],
+            "resolution_rate": 7,
+            "score_weight": 5,
+            "landmarks": [
+                {
+                    "loc": [2,0],
+                    "name": "energy",
+                    "expected_text": "エネルギー"
+                }
+            ],
+            "table_headers": [
+                {
+                    "loc": [2,0],
+                    "name": "energy",
+                    "scope-range": [[2,2],[2,-1]],
+                    "expected_text": "エネルギー"
+                },
+                {
+                    "loc": [3,1],
+                    "name": "electricity",
+                    "scope-range": [[3,2],[3,-1]],
+                    "expected_text": "電気代"
+                },
+                {
+                    "loc": [4,1],
+                    "name": "city gas",
+                    "scope-range": [[4,2],[4,-1]],
+                    "expected_text": "都市ガス代"
+                },
+                {
+                    "loc": [5,1],
+                    "name": "propane gas",
+                    "scope-range": [[5,2],[5,-1]],
+                    "expected_text": "プロパンガス"
+                },
+                {
+                    "loc": [6,1],
+                    "name": "kerosene",
+                    "scope-range": [[6,2],[6,-1]],
+                    "expected_text": "灯油"
+                },
+                {
+                    "loc": [7,1],
+                    "name": "gasoline",
+                    "scope-range": [[7,2],[7,-1]],
+                    "expected_text": "ガソリン"
+                },
+                {
+                    "loc": [0,2],
+                    "name": "weight",
+                    "scope-range": [[2,2],[-1,2]],
+                    "expected_text": "万分比ウエイト"
+                },
+                {
+                    "loc": [0,3],
+                    "name": "2023/04",
+                    "scope-range": [[2,3],[-1,4]],
+                    "expected_text": "2023年4月"
+                },
+                {
+                    "loc": [1,3],
+                    "name": "ratio_to_last_year",
+                    "scope-range": [[2,3],[-1,3]],
+                    "expected_text": "前年同月比(％)"
+                },
+                {
+                    "loc": [1,4],
+                    "name": "contribution_rate",
+                    "scope-range": [[2,4],[-1,4]],
+                    "expected_text": "寄与度"
+                },
+                {
+                    "loc": [0,5],
+                    "name": "2023/05",
+                    "scope-range": [[2,5],[-1,8]],
+                    "expected_text": "2023年5月"
+                },
+                {
+                    "loc": [1,5],
+                    "name": "ratio_to_last_month",
+                    "scope-range": [[2,5],[-1,5]],
+                    "expected_text": "前月比(％)"
+                },
+                {
+                    "loc": [1,6],
+                    "name": "ratio_to_last_year",
+                    "scope-range": [[2,6],[-1,6]],
+                    "expected_text": "前年同月比(％)"
+                },
+                {
+                    "loc": [1,7],
+                    "name": "contribution_rate",
+                    "scope-range": [[2,7],[-1,7]],
+                    "expected_text": "寄与度"
+                },
+                {
+                    "loc": [1,8],
+                    "name": "contribution_rate_differenct",
+                    "scope-range": [[2,8],[-1,8]],
+                    "expected_text": "寄与度差"
+                }
+            ],
+            "additional_info_cells": [
+                {
+                    "loc": [0,3],
+                    "name": "fitst_month"
+                },
+                {
+                    "loc": [0,5],
+                    "name": "second_month"
+                }
+            ]
+        }
+    ]
+}

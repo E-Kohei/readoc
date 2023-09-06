@@ -6,8 +6,16 @@ __all__ = [
     "Cell",
     "CellRelation",
     "Table",
+    "RegexDict",
     "PDFPattern",
     "TextBoxPattern",
     "MatrixTablePattern",
-    "ListTablePattern"
+    "ListTablePattern",
+    "convert_to_img",
+    "convert_to_binary_img",
+    "convert_to_drawings_img",
+    "convert_to_characters_img",
+    "extract_word_boxes",
+    "extract_text",
+    "extract_tables"
 ]

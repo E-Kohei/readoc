@@ -1,8 +1,10 @@
 import numbers
+import re
 import numpy as np
 
 from copy import deepcopy
 from enum import Enum
+from functools import lru_cache
 
 
 class Rect(tuple):
@@ -284,44 +286,57 @@ class Table():
         return y2 - y1
 
 
-if __name__ == '__main__':
-    r1 = Rect(0,10,100,50)
-    r2 = Rect([0,20,70,40])
-    print(f"r1.height() = {r1.height()}")
-    assert(r1.height() == 40)
-    print(f"r1.includes(r2) = {r1.includes(r2)}")
-    assert(r1.includes(r2))
 
-    np.random.seed(74111114)
-    def rrect(base_rect):
-        return Rect(base_rect) + Rect(np.random.random(4)*5-2.5)
-    c11 = Cell(rrect((20,10,70,60)), "City");      c12 = Cell(rrect((70,10,170,60)), "Pok*mon center"); c13 = Cell(rrect((170,10,270,60)), "Jim")
-    c21 = Cell(rrect((20,60,70,140)), "Aspertia"); c22 = Cell(rrect((70,60,270,140)), "Yes")
-    c31 = Cell(rrect((20,140,70,300)), "Nacrene"); c32 = Cell(rrect((70,140,170,220)), "Yes");          c33 = Cell(rrect((170,140,270,220)), "Yes")
-    pass;                                          c42 = Cell(rrect((70,220,170,300)), "Yes");          c43 = Cell(rrect((170,220,270,300)), "No")
+class RegexDict(dict):
+    '''Regex dictionary.
     
-    assert(c11.bbox == c11["bbox"])
-    print(f"c12.width() = {c12.width()}")
-    assert(95 <= c12.width() <= 105)
-    print(f"c12.height() = {c12.height()}")
-    assert(45 <= c12.height() <= 55)
-    assert(Cell(r1,"").includes(Cell(r2,"")))
+    This dictionary can take a regex pattern as a search key.
+    '''
+    def __getitem__(self, key):
+        if isinstance(key, re.Pattern):
+            pattern = key
+            r = [val for raw_key,val in self.items() if RegexDict._key_search(pattern, raw_key)]
+            if len(r) > 0:
+                return r
+            else:
+                raise KeyError(key)
+        else:
+            return super().__getitem__(key)
+    
+    def rget(self, *keys):
+        patterns = [RegexDict._key_compile(key) for key in keys]
+        r = [val for raw_key,val in self.items() 
+             if all([RegexDict._key_search(p, raw_key) for p in patterns])]
+        if len(r) > 0:
+            return r
+        else:
+            raise KeyError(keys)
+    
+    def __contains__(self, key):
+        if isinstance(key, re.Pattern):
+            pattern = key
+            m = [RegexDict._key_search(pattern, raw_key) for raw_key in self.keys()]
+            return True if any(m) else False
+        else:
+            return super().__contains__(key)
+    
+    def is_rin(self, *keys):
+        patterns = [RegexDict._key_compile(key) for key in keys]
+        m = [all(RegexDict._key_search(p, raw_key) for p in patterns) 
+             for raw_key in self.keys()]
+        return True if any(m) else False
+    
+    @staticmethod
+    @lru_cache(maxsize=128)
+    def _key_compile(key):
+        return re.compile(key)
+    
+    @staticmethod
+    def _key_search(pattern, raw_key):
+        if isinstance(raw_key, str):
+            return re.search(pattern, raw_key)
+        elif isinstance(raw_key, tuple):
+            m = [pattern.search(k) for k in raw_key]
+            return m if any(m) else None
 
-    assert(CellRelation.infer_cell_relation(c11, c12) == CellRelation.SAME_ROW)
-    assert(CellRelation.infer_cell_relation(c11, c31) == CellRelation.SAME_COL)
-    assert(CellRelation.infer_cell_relation(c22, c43) == CellRelation.PARTIALLY_SAME_COL)
-    assert(CellRelation.infer_cell_relation(c32, c22) == CellRelation.PARTIALLY_SAME_COL)
-    assert(CellRelation.infer_cell_relation(c31, c32) == CellRelation.PARTIALLY_SAME_ROW)
-    assert(CellRelation.infer_cell_relation(c42, c31) == CellRelation.PARTIALLY_SAME_ROW)
-
-    table = Table.from_cells([c11, c12, c13, c22, c31, c32, c33, c42, c43])
-    assert(table.shape == (4,3))
-    assert(table.is_row_merged_cell(3,0))
-    assert(table.is_col_merged_cell(1,2))
-    assert(245 <= table.get_width() <= 255)
-    assert(285 <= table.get_height() <= 295)
-    print(table.get_width_of_col(1))
-    print(table.get_height_of_row(3))
-    assert(95 <= table.get_width_of_col(1) <= 105)
-    assert(75 <= table.get_height_of_row(3) <= 85)
     
